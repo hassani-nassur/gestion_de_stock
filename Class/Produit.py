@@ -45,7 +45,7 @@ class Produit:
     def update(self,id_produit,nom,description,prix,quantite,id_categorie):
         requete = "UPDATE `produits`SET `nom` = %s, `description` = %s, `prix` = %s, `quantite` = %s, `id_categorie` = %s WHERE `id_produit` = %s"
         
-        data = (nom,description,quantite,prix,id_categorie,id_produit)
+        data = (nom,description,prix,quantite,id_categorie,id_produit)
         
         self.cursor.execute(requete,data)
         
