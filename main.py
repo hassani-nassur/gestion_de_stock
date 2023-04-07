@@ -103,6 +103,7 @@ class interface:
         for i in self.categorie.select():
             name_cat.append(i[1])
         # Categorie
+        name_cat.sort(key=lambda e: e.lower())
         tk.Label(self.formulaire,text="Categorie",font=("Times new roman",14),bg="#fbc3c7").place(x=60,y=70)
         self.categorie_produit = ttk.Combobox(self.formulaire,font=("Times new roman",14))
         self.categorie_produit["values"] = tuple(name_cat)
