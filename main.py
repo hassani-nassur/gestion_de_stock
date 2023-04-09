@@ -129,9 +129,16 @@ class interface:
     def liste_produits(self,produits):
         style = ttk.Style()
 
+
+
         style.configure("Treeview.Heading",font=('times new roman',14),rowheight=12)
-        self.liste_articles = ttk.Treeview(self.fenetre,columns=(0,1,2,3,4,5), show="headings")
+        self.liste_articles = ttk.Treeview(self.fenetre,columns=(0,1,2,3,4,5), show="headings",selectmode='browse')
         self.liste_articles.place(x=30,y=350,width=800,height=270)
+        
+        vsb = ttk.Scrollbar(self.liste_articles, orient="vertical", command=self.liste_articles.yview)
+        vsb.place(x=780, y=0, height=265)
+
+        self.liste_articles.configure(yscrollcommand=vsb.set)
         
         self.liste_articles.heading(0,text="ID")
         self.liste_articles.heading(1,text="Nom")
