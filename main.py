@@ -3,6 +3,7 @@ from Class.Produit import *
 from Class.categorie import *
 import tkinter as tk
 from tkinter import ttk,messagebox
+import time,csv
 
 class interface:
     
@@ -17,8 +18,8 @@ class interface:
         self.configuration()
         self.affichage()
     
+    # affichage des elements
     def affichage(self):
-        
         self.formulaire_produit()
         self.Trie()
         self.btn_options()
@@ -62,13 +63,45 @@ class interface:
         
         self.liste_produits(prods)
     
+    # les button de modification et de supression d'un produits
     def btn_options(self):
+        
+        btn_exporter = tk.Button(self.fenetre,text="Exporter",command=self.export_data)
+        btn_exporter.place(x=870,y=490,width=90)
         
         btn_modify = tk.Button(self.fenetre,text="Modifier",command=self.modify_data)
         btn_modify.place(x=870,y=530,width=90)
+        
         btn_suppression = tk.Button(self.fenetre,text="Supprimer",command=self.delete_data)
         btn_suppression.place(x=870,y=570,width=90)
     
+    # exportaion des donne sous le format csv
+    def export_data(self):
+        data = self.produit.select()
+        # name_file = "les produits du {}.csv".format(time.strftime("%d/%m/%Y"))
+        name_file ="les produits.csv"
+        header = ["id","nom","description","prix","quantite","categorie"]
+        produits = []
+        for produit in data :
+            cat = self.categorie.select(produit[5])
+            produits.append(
+                {
+                    "id":produit[0],
+                    "nom":produit[1],
+                    "description":produit[2],
+                    "prix":produit[3],
+                    "quantite":produit[4],
+                    "categorie":cat[1]
+                }
+            )
+        try:    
+            with open(name_file,"w",newline="") as fichier:
+                file = csv.DictWriter(fichier,fieldnames=header,delimiter=",")
+                file.writeheader()
+                file.writerows(produits)
+        except Exception as e:
+            print("[ERROR]",e)  
+        messagebox.showinfo("Exportation des donnée","l'exportaion des données à reussi.. \nUn fichier nommer \"{}\" a été crée".format(name_file))    
     # supression du produits selectionner
     def delete_data(self):
         if(self.liste_articles.focus() != ""):
@@ -140,8 +173,10 @@ class interface:
         self.quantite_produit = tk.Entry(self.formulaire,font=("Times new roman",14))
         self.quantite_produit.place(x=360,y=100,width=200)
         name_cat = []
+       
         for i in self.categorie.select():
             name_cat.append(i[1])
+       
         # Categorie
         name_cat.sort(key=lambda e: e.lower())
         tk.Label(self.formulaire,text="Categorie",font=("Times new roman",14),bg="#f4cf92").place(x=60,y=70)
@@ -208,7 +243,7 @@ class interface:
                 id_categorie = len(self.categorie.select())
             
             self.produit.update(self.id_produit,nom_produit,description,prix,quantite,id_categorie)
-            messagebox.showinfo("succes","Operation reussi")
+            messagebox.showinfo("succes","Operation reussi! les modifcations sont bien enregistrez.")
             
             self.formulaire.destroy()
             self.formulaire_produit()
@@ -250,7 +285,7 @@ class interface:
                 id_categorie = produits[taille-1][0]
                 print(id_categorie)
             self.produit.insert(nom_produit,description,prix,quantite,id_categorie)
-            messagebox.showinfo("succes","Operation reussi")
+            messagebox.showinfo("succes","Operation reussi !,le produit a bien été ajouter.")
             
             self.formulaire.destroy()
             self.formulaire_produit()
@@ -262,6 +297,7 @@ class interface:
         self.fenetre.geometry("1000x640")
         self.fenetre.config(bg="#f2be74")
         self.fenetre.title("Gestion de stock")
+        self.fenetre.resizable(width=False,height=False)
 
 fenetre = tk.Tk()
 

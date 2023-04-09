@@ -1,0 +1,25 @@
+id,nom,description,prix,quantite,categorie
+2,Turbo,"il s'agit d'une piece d'ocasion.
+",100,10,piece autos
+3,Tichert,"des tichert à la une
+",70,20,Vestimentaire
+4,Samsung A10,"des superbe telephone
+",400,10,Telephone
+5,Iphone 12,"une excellent apareil photo 
+",500,15,Telephone
+6,Jans,"des supers pantallon à la mode
+",15,25,Vestimentaire
+7,pull,"des vetements d'hiver
+",30,20,Vestimentaire
+9,spagette,"un aliment bio
+",5,40,Alimentaire
+10,ordinateur hp,"des ordinateur d'une puissance incroyable.
+",500,5,Electronique
+11,cane à peche,"des belles outil pour une peche reussi
+",12,10,peche
+13,pattate douce,"un aliment contribuant à la croissance des enfants.
+",10,20,Alimentaire
+15,casquette,"une oportunité geniale de pas avoir à supporter le soleil.
+",10,30,Vestimentaire
+16,calculatrice,"des calculateurs scientifique.
+",20,5,education
