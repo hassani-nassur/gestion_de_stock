@@ -3,7 +3,7 @@ from Class.Produit import *
 from Class.categorie import *
 import tkinter as tk
 from tkinter import ttk,messagebox
-import time,csv
+import csv
 
 class interface:
     
