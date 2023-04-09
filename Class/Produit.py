@@ -33,6 +33,14 @@ class Produit:
         
         return resultat
     
+    def select_with_id_categorie(self,id_categorie):
+        requete = "SELECT *FROM `PRODUITS` WHERE `id_categorie` = %s"
+        data = (id_categorie,)
+            
+        self.cursor.execute(requete,data)
+        resultat = self.cursor.fetchall()
+        return resultat
+    
     # supression d'un tuple depuis la base de donné
     def delete(self,id_produit):
         requete = "DELETE FROM `PRODUITS` WHERE `id_produit` =%s"
