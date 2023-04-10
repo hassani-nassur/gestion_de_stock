@@ -18,4 +18,4 @@ description de certain fonctionalitée:
 
     nous avons la possibilitée de trier les données par rapport à leur categorie.
 
-    nous avous ajouter une graphe à fin de permetre une meilleur vue d'ensemble des divers categories des produits. aux niveau du graphe nous avons pris là premier lettre du nom du categorie pour le reprensenter. 
+    j'ai  ajouter une graphe à fin de donner une meilleur vue d'ensemble des divers categories des produits. aux niveau du graphe nous avons pris là premier lettre du nom du categorie pour le reprensenter. 
