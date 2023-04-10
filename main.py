@@ -4,7 +4,9 @@ from Class.categorie import *
 import tkinter as tk
 from tkinter import ttk,messagebox
 import csv
-
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg,NavigationToolbar2Tk
+                                               
 class interface:
     
     def __init__(self,fenetre):
@@ -23,7 +25,43 @@ class interface:
         self.formulaire_produit()
         self.Trie()
         self.btn_options()
+        self.graphe_categorie()
+        
+    def graphe_categorie(self):
+        
+        # the figure that will contain the plot
+        self.figure = Figure(figsize = (3, 3),dpi = 100)
+        # list of squares
+        x=[]
+        y=[]
+  
+        categories = self.categorie.select()
+        for row in categories:
+            x.append(str(row[1])[0].upper())
+            produits = self.produit.select_with_id_categorie(row[0])
+            qtt = 0
+            for line in produits:
+                qtt +=line[4]
+            y.append(qtt)  
+
+        # adding the subplot
+        self.plot1 = self.figure.add_subplot(111)
     
+        # plotting the graph
+        self.plot1.bar(x,y,color = "#37aceb")
+        
+        self.figure.suptitle("Quantité Produits par categories")
+        canvas = FigureCanvasTkAgg(self.figure)  
+        canvas.draw()
+        
+        # les parametre lier à la figure
+        toolbar = NavigationToolbar2Tk(canvas,self.fenetre)
+        toolbar.update()
+        toolbar.place(x=690,y=305)
+    
+        # placement de la figure
+        canvas.get_tk_widget().place(x=660,y=10,height=290,width=330)
+        
     # trie des elements produits
     def Trie(self):
         name_cat = []
@@ -77,11 +115,13 @@ class interface:
     
     # exportaion des donne sous le format csv
     def export_data(self):
+        
         data = self.produit.select()
         # name_file = "les produits du {}.csv".format(time.strftime("%d/%m/%Y"))
         name_file ="les produits.csv"
         header = ["id","nom","description","prix","quantite","categorie"]
         produits = []
+        
         for produit in data :
             cat = self.categorie.select(produit[5])
             produits.append(
@@ -102,6 +142,7 @@ class interface:
         except Exception as e:
             print("[ERROR]",e)  
         messagebox.showinfo("Exportation des donnée","l'exportaion des données à reussi.. \nUn fichier nommer \"{}\" a été crée".format(name_file))    
+   
     # supression du produits selectionner
     def delete_data(self):
         if(self.liste_articles.focus() != ""):
@@ -127,16 +168,15 @@ class interface:
             
     # affichage des produits dans un objet triview
     def liste_produits(self,produits):
+        
         style = ttk.Style()
-
-
-
+        
         style.configure("Treeview.Heading",font=('times new roman',14),rowheight=12)
         self.liste_articles = ttk.Treeview(self.fenetre,columns=(0,1,2,3,4,5), show="headings",selectmode='browse')
         self.liste_articles.place(x=30,y=350,width=800,height=270)
         
         vsb = ttk.Scrollbar(self.liste_articles, orient="vertical", command=self.liste_articles.yview)
-        vsb.place(x=780, y=0, height=265)
+        vsb.place(x=780, y=2, height=265)
 
         self.liste_articles.configure(yscrollcommand=vsb.set)
         
@@ -164,7 +204,7 @@ class interface:
     def formulaire_produit(self,id_produit = None):
         
         self.formulaire = tk.Canvas(self.fenetre,bg="#f4cf92")
-        self.formulaire.place(x=70,y=10,width=600,height=290)
+        self.formulaire.place(x=30,y=10,width=600,height=290)
         
         tk.Label(self.formulaire,text="Nom du produit",font=("Times new roman",14),bg="#f4cf92").place(x=60,y=10)
         self.nom_produit = tk.Entry(self.formulaire, font=("Times new roman",14))
@@ -213,7 +253,7 @@ class interface:
             btn_enregistrer = tk.Button(self.formulaire,text="Anuler",command=self.formulaire_produit,bg="#f2be74")
             btn_enregistrer.place(x=290,y=255,width=150)
         else:
-            btn_enregistrer = tk.Button(self.formulaire,text="Enregistrez",command=self.enregistre_data,bg="#f2be74")
+            btn_enregistrer = tk.Button(self.formulaire,text="Enregistrer",command=self.enregistre_data,bg="#f2be74")
             btn_enregistrer.place(x=240,y=255,width=150)
    
     # enregistrement de la modification effectuer sur un produit    
@@ -256,6 +296,8 @@ class interface:
             self.formulaire_produit()
             self.liste_articles.destroy()
             self.Trie()
+            self.plot1.remove()
+            self.graphe_categorie()
     
     # enregistrement de l'ajouts d'un produits   
     def enregistre_data(self):
@@ -298,6 +340,8 @@ class interface:
             self.formulaire_produit()
             self.liste_articles.destroy()
             self.Trie()
+            self.plot1.remove()
+            self.graphe_categorie()
     
     # configuration de la fentre d'affichge
     def configuration(self):
